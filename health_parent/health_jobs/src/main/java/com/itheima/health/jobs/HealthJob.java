@@ -25,9 +25,9 @@ public class HealthJob {
 //    查询到千牛云的图片名
         List<String> qiniuImg = QiNiuUtils.listFile();
 //    查询到数据库的文件名
-        List<String> dbImg = setMealService.findImg();
+//        List<String> dbImg = setMealService.findImg();
 //        图片集合进行相减
-        qiniuImg.remove(dbImg);
+//        qiniuImg.remove(dbImg);
 //        使用七牛云工具删除
         QiNiuUtils.removeFiles(qiniuImg.toArray(new String[]{}));
 
