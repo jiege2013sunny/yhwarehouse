@@ -25,7 +25,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
         for (OrderSetting orderSetting : orderSettings) {
 //            判断是否有这个信息,如果有,就修改
             if (orderSetting!=null) {
-                orderSettingDao.update(orderSetting)
+                orderSettingDao.update(orderSetting);
             }
 
         }
