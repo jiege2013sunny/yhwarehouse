@@ -136,10 +136,26 @@
             },
             created: function () {//在vue初始化时调用
                 this.initData(null);
+            //    获取当前月份
+                this.getDataByMonth();
             },
             methods: {
 				//预约设置
                 handleOrderSet(day){
+                },
+                //通过月份来获取预约设置信息
+                getDataByMonth(){
+                    // 获取yyyy-MM格式的月份信息,和ordersetting中的data格式一致
+                    var month=this.currentYear+"-"+(this.currentMonth>9?this.currentMonth:"0"+this.currentMonth);
+                    //发送get请求,将月份信息发送到前端
+                    axios.get('/ordersetting/getOrderSettingByMonth.do?month=' + month).then(res => {
+                        //将返回数据中的绑定到leftobj上面(map数据,三个东东)
+                        if(res.data.flag){
+                            this.leftobj = res.data.data;
+                        }else{
+                            this.$message.error(res.data.message);
+                        }
+                    })
                 },
 				//上传之前进行文件格式校验
                 beforeUpload(file){
@@ -158,18 +174,20 @@
                 downloadTemplate(){
                     window.location.href="../../template/ordersetting_template.xlsx";
                 },
-				//上传成功提示
+                //上传成功提示
                 handleSuccess(response, file) {
                     if(response.flag){
                         this.$message({
                             message: response.message,
                             type: 'success'
                         });
+                        //上传文件成功后再调用一下，刷新日历
+                        this.getDataByMonth();
                     }else{
                         this.$message.error(response.message);
                     }
-                    console.log(response, file, fileList);
-                },
+                    //console.log(response, file);
+                }
                 //初始化当前页要展示的日期
 				initData: function (cur) {
                     var date;
@@ -229,13 +247,13 @@
                         this.days.push(dayobject);
                     }
                     
-                    /*this.leftobj = [
+                    this.leftobj = [
                         { date: 1, number: 120, reservations: 1 },
                         { date: 3, number: 120, reservations: 1 },
                         { date: 4, number: 120, reservations: 120 },
                         { date: 6, number: 120, reservations: 1 },
                         { date: 8, number: 120, reservations: 1 }
-                    ];*/
+                    ];
                 },
 				//切换到当前月份
                 goCurrentMonth: function (year, month) {

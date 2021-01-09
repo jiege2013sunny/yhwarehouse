@@ -33,11 +33,11 @@ public class OrderSettingController {
 
     @PostMapping("/upload")
     public Result upLoadSuccess(@RequestBody MultipartFile excelFile) throws IOException {
-//        使用工具类将文件转化为list集合
+//        使用工具类获得Excel文件的list集合对象
         List<String[]> excel = POIUtils.readExcel(excelFile);
-//        日期时间转化
+//        创建格式日期对象,为了转化数据形式然后方便到数据库查询
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(POIUtils.DATE_FORMAT);
-//        将格式转化为ordersetting格式,然后用
+//        使用stream流进行数据转化,将string[]转化成pojo里面的ordersetting
         List<OrderSetting> orderSettings = excel.stream().map(arr -> {
             OrderSetting orderSetting = new OrderSetting();
             try {
