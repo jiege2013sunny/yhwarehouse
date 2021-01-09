@@ -1,20 +1,57 @@
 package com.itheima.health.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.Result;
+import com.itheima.health.pojo.OrderSetting;
+import com.itheima.health.service.OrderSettingService;
 import com.itheima.utils.POIUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
 @RequestMapping("/ordersetting")
 public class OrderSettingController {
+    /**
+     * em...Excel文件上传项目
+     *
+     * @param excelFile
+     * @return
+     * @throws IOException
+     */
+//    订阅服务
+    @Reference
+    private OrderSettingService orderSettingService;
+
     @PostMapping("/upload")
     public Result upLoadSuccess(@RequestBody MultipartFile excelFile) throws IOException {
+//        使用工具类将文件转化为list集合
         List<String[]> excel = POIUtils.readExcel(excelFile);
-        return  null;
+//        日期时间转化
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(POIUtils.DATE_FORMAT);
+//        将格式转化为ordersetting格式,然后用
+        List<OrderSetting> orderSettings = excel.stream().map(arr -> {
+            OrderSetting orderSetting = new OrderSetting();
+            try {
+                Date orderDate = simpleDateFormat.parse(arr[0]);
+                int number = Integer.parseInt(arr[1]);
+                orderSetting.setOrderDate(orderDate);
+                orderSetting.setNumber(number);
+            } catch (ParseException e) {
+            }
+            return orderSetting;
+        }).collect(Collectors.toList());
+//        使用业务层方法 来进行文件上传
+        orderSettingService.add(orderSettings);
+//        返回结果集
+        return new Result(true, MessageConstant.IMPORT_ORDERSETTING_SUCCESS);
     }
 }
