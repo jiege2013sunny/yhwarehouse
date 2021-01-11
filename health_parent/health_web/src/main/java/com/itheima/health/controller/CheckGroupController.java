@@ -18,6 +18,25 @@ public class CheckGroupController {
     @Reference
     private CheckGroupService checkGroupService;
 
+    /**
+     * 查询所有被勾选的检查组ids
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/findcheckgroupIds")
+    public Result findIds(int id) {
+        List<Integer> ids = checkGroupService.findIds(id);
+        return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, ids);
+    }
+
+    @PostMapping("/deleteById")
+    public Result deleteById(int id) {
+        //调用业务服务删除
+        checkGroupService.deleteById(id);
+        return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
+    }
+
     @GetMapping("/findById")
     public Result findById(int checkGroupId) {
         // 调用业务服务
@@ -66,6 +85,6 @@ public class CheckGroupController {
     @GetMapping("/findall")
     public Result findAll() {
         List<CheckGroup> checkGroups = checkGroupService.findAll();
-        return new Result(true,MessageConstant.QUERY_CHECKGROUP_SUCCESS,checkGroups);
+        return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, checkGroups);
     }
 }

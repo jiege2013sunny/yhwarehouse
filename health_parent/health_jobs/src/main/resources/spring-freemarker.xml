@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--读取properties配置文件中的输出路径-->
+    <context:property-placeholder location="classpath:freemarker.properties" ignore-unresolvable="true"/>
+    <!---->
+    <bean id="freemarkerConfiguration" class="freemarker.template.Configuration">
+        <!--配置freemarker,引入版本号-->
+        <!--index是构造方法中参数的位置-->
+        <constructor-arg index="0" ref="freemarkerVersion"/>
+    </bean>
+    <!--使用静态工厂方法获取版本信息-->
+    <bean id="freemarkerVersion" class="freemarker.template.Configuration" factory-method="getVersion"/>
+</beans>

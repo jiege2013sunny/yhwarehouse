@@ -22,5 +22,76 @@
             </if>
         </where>
     </select>
+    <select id="findAllSetmeal" resultType="setmeal">
+    select * from t_setmeal
+    </select>
+    <!--如何封装查询到的结果-->
+    <resultMap id="SetmealDetail" type="Setmeal">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="remark" column="remark"/>
+        <result property="img" column="img"/>
+        <!-- ofType 指定多方的类型，必须的 -->
+        <collection property="checkGroups" ofType="CheckGroup">
+            <id property="id" column="checkgroup_id"/>
+            <result property="name" column="checkgroup_name"/>
+            <result property="remark" column="checkgroup_remark"/>
+            <collection property="checkItems" ofType="CheckItem">
+                <id property="id" column="checkitem_id"/>
+                <result property="name" column="checkitem_name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <!--五表查询的语句-->
+    <select id="findDetailById" parameterType="int" resultMap="SetmealDetail">
+        select s.id,s.name,s.age,s.sex,s.remark,s.img,
+        sc.checkgroup_id,g.name checkgroup_name,g.remark checkgroup_remark,
+        cc.checkitem_id,ci.name checkitem_name
+    From t_setmeal s
+    left join t_setmeal_checkgroup sc on s.id=sc.setmeal_id
+    left join t_checkgroup g on sc.checkgroup_id=g.id
+    left join t_checkgroup_checkitem cc on g.id=cc.checkgroup_id
+    left join t_checkitem ci on cc.checkitem_id=ci.id
+    where s.id=#{id}
+    </select>
+
+    <select id="findById" parameterType="int" resultType="setmeal">
+    select * From t_setmeal where id=#{id}
+</select>
+
+    <update id="update" parameterType="setmeal">
+        update t_setmeal set
+        name=#{name},
+        code=#{code},
+        helpCode=#{helpCode},
+        sex=#{sex},
+        age=#{age},
+        price=#{price},
+        remark=#{remark},
+        attention=#{attention},
+        img=#{img}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteSetmealCheckgroup" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id=#{id}
+    </delete>
+
+    <delete id="deleteSetmeal" parameterType="int">
+        delete from t_setmeal where id=#{id}
+    </delete>
+
+    <select id="findHuiyuan" parameterType="int" resultType="int">
+        select count(1) from t_order where setmeal_id=#{id}
+    </select>
+    <select id="findImg" resultType="string">
+        select img from t_setmeal
+    </select>
+
 </mapper>
+
+
+
 

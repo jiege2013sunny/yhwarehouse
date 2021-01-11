@@ -18,4 +18,8 @@ public interface CheckGroupService {
     void update(CheckGroup checkGroup, Integer[] checkitemIds);
 
     List<CheckGroup> findAll();
+
+    void deleteById(int id);
+
+    List<Integer> findIds(int id);
 }

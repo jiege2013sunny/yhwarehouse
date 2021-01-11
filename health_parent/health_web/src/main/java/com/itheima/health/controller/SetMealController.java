@@ -8,15 +8,9 @@ import com.itheima.health.pojo.QueryPageBean;
 import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetMealService;
 import com.itheima.utils.QiNiuUtils;
-import com.sun.org.apache.regexp.internal.RE;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +21,18 @@ public class SetMealController {
     //    订阅服务
     @Reference
     private SetMealService setMealService;
+    /**
+     * 通过id查询套餐信息
+     */
+    @GetMapping("/findSetmealById")
+    public Result findSetmealById(Integer id){
+        Setmeal setmeal = setMealService.findById(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("domain",QiNiuUtils.DOMAIN);
+        map.put("setmeal",setmeal);
+        return new Result(true,MessageConstant.QUERY_SETMEAL_SUCCESS,map);
+
+    }
 
     /**
      * 进行分页查询套餐信息
@@ -76,10 +82,22 @@ public class SetMealController {
         return new Result(true, MessageConstant.UPLOAD_SUCCESS, map);
     }
 
-   /* @PostMapping("/add")
-    public Result add(){
 
+    //========================================================================
+    @PostMapping("/update")
+    public Result update(@RequestBody Setmeal setmeal,Integer[] checkgroupIds) {
+        setMealService.update(setmeal, checkgroupIds);
+        return new Result(true, "修改套餐成功");
     }
-    */
+
+    /**
+     * 删除套餐
+     */
+    @GetMapping("/deleteByID")
+    public Result deleteById(int id){
+        setMealService.deleteById(id);
+        return new Result(true,MessageConstant.DELETE_SETMEAL_SUCCESS);
+    }
+
 
 }

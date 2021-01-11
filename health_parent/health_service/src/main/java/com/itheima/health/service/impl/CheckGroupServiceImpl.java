@@ -4,6 +4,8 @@ import com.alibaba.druid.util.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.itheima.exception.MyException;
+import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.dao.CheckGroupDao;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.pojo.CheckGroup;
@@ -81,4 +83,28 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         return checkGroupDao.findAll();
 
     }
+
+    @Override
+    @Transactional
+    public void deleteById(int id) throws MyException {
+        // 检查 这个检查组是否被套餐使用了
+        int count = checkGroupDao.findSetmealCountByCheckGroupId(id);
+        if(count > 0){
+            // 被使用了
+            throw new MyException(MessageConstant.CHECKGROUP_IN_USE);
+        }
+        // 没有被套餐使用,就可以删除数据
+        // 先删除检查组与检查项的关系
+        checkGroupDao.deleteCheckGroupCheckItem(id);
+        // 删除检查组
+        checkGroupDao.deleteById(id);
+    }
+
+    @Override
+    public List<Integer> findIds(int id) {
+        List<Integer> list=checkGroupDao.findIds(id);
+        return list;
+    }
+
+
 }

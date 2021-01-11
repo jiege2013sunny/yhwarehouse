@@ -4,6 +4,8 @@ import com.github.pagehelper.Page;
 import com.itheima.health.pojo.Setmeal;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface SetMealDao {
     //    添加套餐信息
     void add(Setmeal setmeal);
@@ -17,4 +19,21 @@ public interface SetMealDao {
      * @return
      */
     Page<Setmeal> findPage(@Param("queryString") String queryString);
+
+    List<Setmeal> findAllSetmeal();
+
+    Setmeal findDetailById(Integer id);
+
+    Setmeal findById(Integer id);
+
+    void update(Setmeal setmeal);
+
+
+    void deleteSetmealCheckgroup(Integer id);
+
+    int findHuiyuan(int id);
+
+    void deleteSetmeal(int id);
+
+    List<String> findImg();
 }
