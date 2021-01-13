@@ -129,12 +129,13 @@
                 currentDay: 1,
                 currentMonth: 1,
                 LocalMonth: 1,
-                currentYear: 1970,
+                currentYear: 2020,
                 currentWeek: 1,
                 days: [],
                 leftobj: []//用于装载页面显示的月份已经进行预约设置的数据
             },
             created: function () {//在vue初始化时调用
+                //做表格
                 this.initData(null);
             //    获取当前月份
                 this.getDataByMonth();
@@ -196,9 +197,9 @@
                         date = new Date(cur);
                     } else {
                         var now = new Date();
-                        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1));
+                        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth()+1, 1));
                         d.setDate(35);
-                        date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                        date = new Date(this.formatDate(d.getFullYear(), d.getMonth(), 1));
                     }
                     this.currentDay = date.getDate();
                     this.currentYear = date.getFullYear();
@@ -247,20 +248,21 @@
                         this.days.push(dayobject);
                     }
                     
-                    this.leftobj = [
-                        { date: 1, number: 120, reservations: 1 },
-                        { date: 3, number: 120, reservations: 1 },
-                        { date: 4, number: 120, reservations: 120 },
-                        { date: 6, number: 120, reservations: 1 },
-                        { date: 8, number: 120, reservations: 1 }
-                    ];
+                    // this.leftobj = [
+                    //     { date: 1, number: 120, reservations: 1 },
+                    //     { date: 3, number: 120, reservations: 1 },
+                    //     { date: 4, number: 120, reservations: 120 },
+                    //     { date: 6, number: 120, reservations: 1 },
+                    //     { date: 8, number: 120, reservations: 1 }
+                    // ];
                 },
-				//切换到当前月份
+                //切换到当前月份
                 goCurrentMonth: function (year, month) {
                     var d = new Date();
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
-				//向前一个月
+//向前一个月
                 pickPre: function (year, month) {
                     // setDate(0); 上月最后一天
                     // setDate(-1); 上月倒数第二天
@@ -268,12 +270,14 @@
                     var d = new Date(this.formatDate(year, month, 1));
                     d.setDate(0);
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
-				//向后一个月
+//向后一个月
                 pickNext: function (year, month) {
                     var d = new Date(this.formatDate(year, month, 1));
                     d.setDate(35);////获取指定天之后的日期
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
                 // 返回 类似 2016-01-02 格式的字符串
                 formatDate: function (year, month, day) {

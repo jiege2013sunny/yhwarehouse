@@ -13,4 +13,14 @@
     <update id="update" parameterType="orderSetting">
          update t_ordersetting set number=#{number} where orderDate = #{orderDate}
     </update>
+    <!--根据月份查找信息-->
+    <select id="getOrderSettingByMonth"
+            parameterType="map"
+            resultType="OrderSetting">
+    select * from t_ordersetting where orderDate between #{dateBegin} and #{dateEnd}
+</select>
+
+    <update id="editReservationsByOrderDate" parameterType="date">
+    update t_ordersetting set reservations = reservations+1 where orderDate = #{orderDate} and number>reservations
+</update>
 </mapper>

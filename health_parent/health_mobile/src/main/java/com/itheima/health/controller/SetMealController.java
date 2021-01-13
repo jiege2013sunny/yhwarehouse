@@ -6,6 +6,7 @@ import com.itheima.health.entity.Result;
 import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetMealService;
 import com.itheima.utils.QiNiuUtils;
+import com.itheima.utils.SMSUtils;
 import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.omg.CORBA.INTERNAL;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/setmeal")

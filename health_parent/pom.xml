@@ -16,6 +16,7 @@
         <module>health_web</module>
         <module>health_jobs</module>
         <module>health_mobile</module>
+        <module>spring_security</module>
     </modules>
 
     <packaging>pom</packaging>

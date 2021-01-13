@@ -67,4 +67,5 @@ public interface MessageConstant {
     static final String CHECKITEM_IN_USE = "检查项被检查组关联了,请检查后再删除";
     static final String CHECKGROUP_IN_USE = "检查组被套餐关联了,请检查后再删除";
     static final String DELETE_SETMEAL_SUCCESS = "删除检查套餐成功";
+    static final String SEND_VALIDATECODE = "验证码已发送,请注意查收";
 }

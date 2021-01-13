@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -31,6 +32,22 @@ public class OrderSettingController {
     @Reference
     private OrderSettingService orderSettingService;
 
+    /**
+     *动态展示当前月份预约信息
+     */
+    @GetMapping("/getOrderSettingByMonth")
+    public Result findOrderOettingByMonth(String month){
+//        通过月份查询预约信息
+        List<Map> osList=orderSettingService.getOrderSettingByMonth(month);
+        return new Result(true,MessageConstant.GET_ORDERSETTING_SUCCESS,osList);
+    }
+
+    /**
+     *通过表格批量上传数据信息
+     * @param excelFile
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/upload")
     public Result upLoadSuccess(@RequestBody MultipartFile excelFile) throws IOException {
 //        使用工具类获得Excel文件的list集合对象
@@ -51,7 +68,10 @@ public class OrderSettingController {
         }).collect(Collectors.toList());
 //        使用业务层方法 来进行文件上传
         orderSettingService.add(orderSettings);
+
 //        返回结果集
         return new Result(true, MessageConstant.IMPORT_ORDERSETTING_SUCCESS);
+
+
     }
 }
